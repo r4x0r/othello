@@ -13,7 +13,7 @@ class Player:
 
       # Constants to start with
       # Depth for the maximum value for the minimax to search to
-      # Initialise the best value at the start.
+      # Initialise the best value at the start. A negative value at the start.
       self.depth = 13
       self.bestValue = -100
 
@@ -55,6 +55,7 @@ class Player:
       # elif color == 'B': oppColor = 'W'
       # else: assert False, 'ERROR: Current player is not W or B!'
 
+      # This is from random player
       # find all valid moves
       moves = []
       for i in xrange(len(board)):
@@ -82,6 +83,83 @@ class Player:
 
       print "  best M, V:", bestMove, bestValue
       return bestMove
+
+  def max_value(self, board, pos, depth):
+    """
+    This function returns a utility value
+
+    board: a list to represent all 64 squares
+    pos: coordinates of position to explore
+    depth: the depth of which the algo should recurse to. (to check for terminal)
+    """
+    # Check for terminal state
+    if depth == 0:
+      return eva_utility(board) # have to code the evaluation function
+
+    # Copy the board to not screw it up
+    boardCopy = copy.deepcopy(board)
+
+    # Bestvalue
+    bestValue = self.bestValue
+
+    # Find the valid moves
+    valid_moves = self.find_valid_moves()
+    # if there is no valid moves, sometimes there are no valid moves
+    if len(valid_moves) = 0:
+      print "evaluated at depth, by", depth, myColor
+      return sign * self.evaluate_end(boardCopy)
+
+    for move in valid_moves:
+      value = self.min_value(boardCopy, move, depth -1)
+      bestValue = max(bestValue, value)
+
+    return bestValue
+
+  def min_value(self, board, pos, depth):
+    """
+    This function returns a utility value
+
+    board: a list to represent all 64 squares
+    pos: coordinates of position to explore
+    depth: the depth of which the algo should recurse to. (to check for terminal)
+    """
+    # Check for terminal state
+    if depth == 0:
+      return eva_utility(board) # have to code the evaluation function
+
+    # Copy the board to not screw it up
+    boardCopy = copy.deepcopy(board)
+
+    # Bestvalue
+    bestValue = -1* self.bestValue
+
+    # Find the valid moves
+    valid_moves = self.find_valid_moves()
+    # if there is no valid moves, sometimes there are no valid moves
+    if len(valid_moves) = 0:
+      print "evaluated at depth, by", depth, myColor
+      return sign * self.evaluate_end(boardCopy)
+
+    for move in valid_moves:
+      value = self.max_value(boardCopy, move, depth -1)
+      bestValue = min(bestValue, value)
+
+    return bestValue
+
+
+  def find_valid_moves():
+    """
+    Returns a list of all the valid moves
+    """
+    moves = []
+    for i in xrange(len(board)):
+      for j in xrange(len(board[i])):
+        if board[i][j] != 'G': continue #background is green, i.e., empty square
+          for ddir in constants.DIRECTIONS:
+            if self.validMove(board, (i,j), ddir, self.myColor, self.oppoColor):
+              moves.append((i,j))
+              break
+
 
   def negamax(self, board, pos, depth, myColor, oppoColor, sign):
       """
