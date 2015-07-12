@@ -14,7 +14,7 @@ class Player:
     # Constants to start with
     # Depth for the maximum value for the minimax to search to
     # Initialise the best value at the start. A negative value at the start.
-    self.depth = 4
+    self.depth = 6
     self.bestValue = -100
 
     self.alpha = -100
@@ -231,28 +231,58 @@ class Player:
   	my_discCount = count_white(self,board)
   	opponent_discCount = count_black(self,board)
   	corners = self.get_corners()
+  	numberOfMoves = len(find_valid_moves(self,board))
 
   	countGreen = count_empty(self,board)
-  	state = 0 #0 for early game. 1 for mid-end game
-  	if countGreen < 48:
+  	state = 0 #0 for early game. 1 for mid game, 2 for late game
+  	if countGreen < 46:
   		state = 1
+  	elif countGreen < 10:
+  		state = 2
 
   	if state == 0: # early game, maintain fewer discs than opponent
+  		print "Early game"
   		if my_discCount < opponent_discCount:
-  			earlyScore += 10
+  			earlyScore += 20
   		else: 
-  			earlyScore -= 5
+  			earlyScore -= 10
+  	if numberOfMoves > 3:
+  		earlyScore += 15
+
 
   	elif state == 1:
+  		print "Mid game reached"
+  		if board[3][3] == "B":
+      		lateScore += 4
+    	if board[4][3] == "B":
+      		lateScore += 4
+    	if board[3][4] == "B":
+      		lateScore += 4
+    	if board[4][4] == "B":
+      		lateScore += 4
+      	if numberOfMoves > 4:
+      		lateScore += 15
+
   		for corner in corners:
         	row, col = corner
         	# print board[row][col], "color"
         	if board[row][col] == 'W':
-            	lateScore += 10
+            	lateScore += 25
         	elif board[row][col] == 'G':
-            	lateScore += 3
+            	lateScore += 10
         	else:
-            	lateScore -= 1
+            	lateScore -= 5
+
+    elif state == 2:
+    	print "Late game"
+        if my_discCount - opponent_discCount <= 0:
+        	lateScore -=15
+        elif my_discCount - opponent_discCount > 0:
+        	lateScore += 5
+        elif my_discCount - opponent_discCount > 5:
+        	lateScore += 10
+        elif my_discCount - opponent_discCount > 10:
+        	lateScore += 15
     totalScore = earlyScore + lateScore
     return totalScore
 
