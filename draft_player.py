@@ -116,7 +116,8 @@ class Player:
     """
     # Check for terminal state
     if depth == 0:
-      return eva_utility(board) # have to code the evaluation function
+      return self.evaluate_white(board)
+      #return eva_utility(board) # have to code the evaluation function
 
     # Copy the board to not screw it up
     boardCopy = copy.deepcopy(board)
@@ -276,6 +277,16 @@ class Player:
       score = 0
       corners = self.get_corners()
 
+      if board[3][3] == 'W':
+        score += 2
+      if board[4][3] == 'W':
+        score += 2
+      if board[3][4] == 'W':
+        score += 2
+      if board[4][4] == 'W':
+        score += 2
+
+
       for corner in corners:
           row, col = corner
           # print board[row][col], "color"
@@ -286,6 +297,20 @@ class Player:
           else:
               score += 1
       return score
+
+  def evaluate_inside(self,board):
+    score = 0
+    if board[3][3] == "W":
+      score += 1
+    if board[4][3] == "W":
+      score += 2
+    if board[3][4] == "W":
+      score += 2
+    if board[4][4] == "W":
+      score += 3
+    return score
+  
+
 
   def evaluate_end(self, board):
       score = 0
@@ -335,7 +360,7 @@ class Player:
 
 
   def evaluate(self, board, color):
-      # print "am called", color
+      print "am called", color
       score = 0
       corners = self.get_corners()
 
