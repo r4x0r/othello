@@ -99,7 +99,7 @@ class Player:
 
     # Check for terminal state
     if depth == 0:
-      return self.evalkyn(board)
+      return self.evaluate(board)
       #return eva_utility(board) # have to code the evaluation function
 
     # Copy the board to not screw it up
@@ -128,6 +128,7 @@ class Player:
         print "best value above beta value"
         return bestValue
 
+
       # updating the best value
       alpha_value = max(alpha_value, value)
 
@@ -144,7 +145,7 @@ class Player:
     # Check for terminal state
     if depth == 0:
       # return eva_utility(board) # have to code the evaluation function
-      return self.evalkyn(board)
+      return self.evaluate(board)
 
     # Copy the board to not screw it up
     boardCopy = copy.deepcopy(board)
@@ -172,6 +173,7 @@ class Player:
         print "best value below alpha value"
         return bestValue
 
+
       # updating the best value
       beta_value = min(beta_value, value)
 
@@ -184,105 +186,70 @@ class Player:
     corners = [(0, 0), (0, size-1), (size-1, 0), (size-1, size-1)]
     return corners
 
-  def evaluate_white(self, board):
-    # print "am called", color
-    score = 0
+
+  def evaluate(self,board):
+
+    #first determine game state
+
+    totalScore = 0
+    earlyScore = 0
+    lateScore = 0
+    my_discCount = self.count_white(board)
+    opponent_discCount = self.count_black(board)
     corners = self.get_corners()
+    numberOfMoves = len(self.find_valid_moves(board))
 
-    if board[3][3] == 'W':
-      score += 2
-    if board[4][3] == 'W':
-      score += 2
-    if board[3][4] == 'W':
-      score += 2
-    if board[4][4] == 'W':
-      score += 2
+    countGreen = self.count_empty(board)
+    state = 0 #0 for early game. 1 for mid game, 2 for late game
+
+    if countGreen < 46:
+      state = 1
+    elif countGreen < 10:
+      state = 2
+
+    if state == 0: # early game, maintain fewer discs than opponent
+      print "Early game"
+      if my_discCount < opponent_discCount:
+        earlyScore += 20
+      else:
+        earlyScore -= 10
+    if numberOfMoves > 3:
+      earlyScore += 15
 
 
-    for corner in corners:
+    elif state == 1:
+      print "Mid game reached"
+      if board[3][3] == "B":
+        lateScore += 4
+      if board[4][3] == "B":
+        lateScore += 4
+      if board[3][4] == "B":
+        lateScore += 4
+      if board[4][4] == "B":
+        lateScore += 4
+      if numberOfMoves > 4:
+        lateScore += 15
+
+      for corner in corners:
         row, col = corner
         # print board[row][col], "color"
         if board[row][col] == 'W':
-            score += 10
+          lateScore += 25
         elif board[row][col] == 'G':
-            score += 3
+          lateScore += 10
         else:
-            score += 1
-    return score
-
-  def evaluate_inside(self,board):
-    score = 0
-    if board[3][3] == "W":
-      score += 1
-    if board[4][3] == "W":
-      score += 2
-    if board[3][4] == "W":
-      score += 2
-    if board[4][4] == "W":
-      score += 3
-    return score
-
-  def evalkyn(self,board):
-  	#first determine game state
-
-  	totalScore = 0
-  	earlyScore = 0
-  	lateScore = 0
-  	my_discCount = count_white(self,board)
-  	opponent_discCount = count_black(self,board)
-  	corners = self.get_corners()
-  	numberOfMoves = len(find_valid_moves(self,board))
-
-  	countGreen = count_empty(self,board)
-  	state = 0 #0 for early game. 1 for mid game, 2 for late game
-  	if countGreen < 46:
-  		state = 1
-  	elif countGreen < 10:
-  		state = 2
-
-  	if state == 0: # early game, maintain fewer discs than opponent
-  		print "Early game"
-  		if my_discCount < opponent_discCount:
-  			earlyScore += 20
-  		else: 
-  			earlyScore -= 10
-  	if numberOfMoves > 3:
-  		earlyScore += 15
-
-
-  	elif state == 1:
-  		print "Mid game reached"
-  		if board[3][3] == "B":
-      		lateScore += 4
-    	if board[4][3] == "B":
-      		lateScore += 4
-    	if board[3][4] == "B":
-      		lateScore += 4
-    	if board[4][4] == "B":
-      		lateScore += 4
-      	if numberOfMoves > 4:
-      		lateScore += 15
-
-  		for corner in corners:
-        	row, col = corner
-        	# print board[row][col], "color"
-        	if board[row][col] == 'W':
-            	lateScore += 25
-        	elif board[row][col] == 'G':
-            	lateScore += 10
-        	else:
-            	lateScore -= 5
+          lateScore -= 5
 
     elif state == 2:
-    	print "Late game"
-        if my_discCount - opponent_discCount <= 0:
-        	lateScore -=15
-        elif my_discCount - opponent_discCount > 0:
-        	lateScore += 5
-        elif my_discCount - opponent_discCount > 5:
-        	lateScore += 10
-        elif my_discCount - opponent_discCount > 10:
-        	lateScore += 15
+      print "Late game"
+      if my_discCount - opponent_discCount <= 0:
+        lateScore -=15
+      elif my_discCount - opponent_discCount > 0:
+        lateScore += 5
+      elif my_discCount - opponent_discCount > 5:
+        lateScore += 10
+      elif my_discCount - opponent_discCount > 10:
+        lateScore += 15
     totalScore = earlyScore + lateScore
     return totalScore
 
@@ -302,19 +269,6 @@ class Player:
     return score
 
 
-  def evaluate(self, board, color):
-    print "am called", color
-    score = 0
-    corners = self.get_corners()
-
-    for corner in corners:
-        row, col = corner
-        # print board[row][col], "color"
-        if board[row][col] == color:
-            score += 10
-        elif board[row][col] == 'G':
-            score += 5
-    return score
 
   #################### Used by the whole Othello programm ######################
 
@@ -386,25 +340,25 @@ class Player:
     return moves
 
   def count_white(self,board):
-  	count = 0
-  	for i in xrange(7):
-  		for j in xrange(7):
-  			if board[i][j] == "W":
-  				count += 1
-  	return count
+    count = 0
+    for i in xrange(7):
+      for j in xrange(7):
+        if board[i][j] == "W":
+          count += 1
+    return count
 
   def count_black(self,board):
-  	count = 0
-  	for i in xrange(7):
-  		for j in xrange(7):
-  			if board[i][j] == 'B'
-  			count += 1
-  	return count
+    count = 0
+    for i in xrange(7):
+      for j in xrange(7):
+        if board[i][j] == 'B':
+          count += 1
+    return count
 
   def count_empty(self,board):
-  	count = 0
-  	for i in xrange(7):
-  		for j in xrange(7):
-  			if board[i][j] == "G":
-  				count += 1
-  	return count
+    count = 0
+    for i in xrange(7):
+      for j in xrange(7):
+        if board[i][j] == "G":
+          count += 1
+    return count
