@@ -410,9 +410,9 @@ if __name__ == '__main__':
     #black = board
 
     #two automated players using random move
-    import randomplayer
-    white = randomplayer.RandomPlayer('W')
-    black = randomplayer.RandomPlayer('B')
+    #import randomplayer
+    #white = randomplayer.RandomPlayer('W')
+    #black = randomplayer.RandomPlayer('B')
 
     #white: human player, black: player using random move
     #import randomplayer
@@ -420,9 +420,9 @@ if __name__ == '__main__':
     #black = randomplayer.RandomPlayer('B')
 
     #white: player using random move, black: human player
-    #import randomplayer
-    #white = randomplayer.RandomPlayer('W')
-    #black = board
+    import  playerv3
+    white = playerv3.Player('W')
+    black = board
 
     #two automated players connecting via TCP/IP
     #import server
