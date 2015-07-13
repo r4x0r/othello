@@ -14,7 +14,7 @@ class Player:
     # Constants to start with
     # Depth for the maximum value for the minimax to search to
     # Initialise the best value at the start. A negative value at the start.
-    self.depth = 6
+    self.depth = 8
     self.bestValue = -100
 
     self.alpha = -100
@@ -216,7 +216,7 @@ class Player:
 
     if countGreen < 47:
       state = 1
-    elif countGreen < 13:
+    elif countGreen < 15:
       state = 2
 
     if state == 0: # early game, maintain fewer discs than opponent
@@ -230,7 +230,7 @@ class Player:
 
 
     elif state == 1:
-      print "Mid game reached"
+      print "Mid game reached" #maintin inside 4 pieces
       if board[3][3] == self.myColor:
         lateScore += 4
       if board[4][3] == self.myColor:
@@ -239,8 +239,8 @@ class Player:
         lateScore += 4
       if board[4][4] == self.myColor:
         lateScore += 4
-      if numberOfMoves > 4:
-        lateScore += 15
+      if numberOfMoves > 4: #have more mobility
+        lateScore += 25
 
       for corner in corners:
         row, col = corner
