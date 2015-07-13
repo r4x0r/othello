@@ -20,10 +20,8 @@ class Player:
     self.alpha = -100
     self.beta = 100
 
-<<<<<<< HEAD
-=======
+
     # Initialise move count
->>>>>>> origin/master
     self.moveCount = 0
 
     # Initilise the opponent colour
@@ -64,10 +62,7 @@ class Player:
 
     # This is from random player
     # find all valid moves
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
     state = 0 #state 0 = opening, state 1 = after opening
     randomSwitch = random.randint(0,1)
 
@@ -192,11 +187,7 @@ class Player:
 
       # pruning part
       if bestValue >= beta_value:
-<<<<<<< HEAD
-        #print "best value above beta value"
-=======
         # print "best value above beta value"
->>>>>>> origin/master
         return bestValue
 
 
@@ -241,11 +232,8 @@ class Player:
 
       # pruning part
       if bestValue <= alpha_value:
-<<<<<<< HEAD
-        #print "best value below alpha value"
-=======
+
         # print "best value below alpha value"
->>>>>>> origin/master
         return bestValue
 
 
