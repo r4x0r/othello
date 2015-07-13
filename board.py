@@ -421,8 +421,8 @@ if __name__ == '__main__':
 
     #white: player using random move, black: human player
     import  playerv3
-    white = playerv3.Player('W')
-    black = board
+    black = playerv3.Player('B')
+    white = board
 
     #two automated players connecting via TCP/IP
     #import server

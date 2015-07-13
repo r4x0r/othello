@@ -14,11 +14,13 @@ class Player:
     # Constants to start with
     # Depth for the maximum value for the minimax to search to
     # Initialise the best value at the start. A negative value at the start.
-    self.depth = 8
+    self.depth = 5
     self.bestValue = -100
 
     self.alpha = -100
     self.beta = 100
+
+    self.moveCount = 0
 
     # Initilise the opponent colour
     if color == 'W':
@@ -58,14 +60,51 @@ class Player:
 
     # This is from random player
     # find all valid moves
-    moveCount = 0
     state = 0 #state 0 = opening, state 1 = after opening
+    randomSwitch = random.randint(0,1)
 
     #parallel, diagonal and perpendicular openings
     # if white, parallel is the best. If black, avoid parallel
 
-    opening_moves = {}
+    boardParallel = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G',
+ 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
+, 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
+    
+    boardDiagonal1 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'W', 'G', 'G',
+ 'G'], ['G', 'G', 'G', 'W', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
+, 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
+    
+    boardDiagonal2 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G',
+ 'G'], ['G', 'G', 'G', 'W', 'W', 'W', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
+, 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
+    
+    boardDiagonal3 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G',
+ 'G'], ['G', 'G', 'G', 'W', 'B', 'G', 'G', 'G'], ['G', 'G', 'G', 'W', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'W', 'G', 'G'
+, 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
 
+    boardDiagonal4 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G',
+ 'G'], ['G', 'G', 'G', 'W', 'B', 'G', 'G', 'G'], ['G', 'G', 'W', 'W', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
+, 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
+
+
+    if self.moveCount == 0 and self.myColor == "W":
+      self.moveCount += 1
+      return (2,4)
+
+    if board == boardParallel and self.myColor == "W":
+      return (3,2)
+
+    if board == boardDiagonal1 and self.myColor == "B":
+      return (2,5)
+
+    if board == boardDiagonal2 and self.myColor == "B":
+      return (2,5)
+
+    if board == boardDiagonal3 and self.myColor == "B":
+      return (5,2)
+
+    if board == boardDiagonal4 and self.myColor == "B":
+      return (5,2)
 
     moves = []
     for i in xrange(len(board)):
@@ -82,6 +121,14 @@ class Player:
     bestValue = self.bestValue
 
 
+    if randomSwitch == 1:
+      moves = moves[::-1]
+    #  print "reversed!"
+
+    emptySpaces = self.count_empty(board)
+    if emptySpaces < 12:
+      print "Changing depth of search"
+      self.depth = 11
 
     for move in moves:
       # you are a max player
@@ -92,7 +139,7 @@ class Player:
         bestMove = move
 
       print bestMove
-      moveCount += 1
+      self.moveCount += 1
       return bestMove
 
 
@@ -137,7 +184,7 @@ class Player:
 
       # pruning part
       if bestValue >= beta_value:
-        print "best value above beta value"
+        #print "best value above beta value"
         return bestValue
 
 
@@ -182,7 +229,7 @@ class Player:
 
       # pruning part
       if bestValue <= alpha_value:
-        print "best value below alpha value"
+        #print "best value below alpha value"
         return bestValue
 
 
@@ -214,47 +261,78 @@ class Player:
     countGreen = self.count_empty(board)
     state = 0 #0 for early game. 1 for mid game, 2 for late game
 
-    if countGreen < 47:
-      state = 1
-    elif countGreen < 15:
+    if countGreen < 13:
       state = 2
+    elif countGreen < 41:
+      state = 1
 
     if state == 0: # early game, maintain fewer discs than opponent
-      print "Early game"
+      #print "Early game"
       if my_discCount < opponent_discCount:
         earlyScore += 20
       else:
         earlyScore -= 10
-    if numberOfMoves > 3:
-      earlyScore += 15
+      if numberOfMoves > 3:
+        earlyScore += 15
 
 
     elif state == 1:
-      print "Mid game reached" #maintin inside 4 pieces
-      if board[3][3] == self.myColor:
-        lateScore += 4
-      if board[4][3] == self.myColor:
-        lateScore += 4
-      if board[3][4] == self.myColor:
-        lateScore += 4
-      if board[4][4] == self.myColor:
-        lateScore += 4
+      #print "Mid game reached" #maintin inside 4 pieces, dont put adjacent to corner
       if numberOfMoves > 4: #have more mobility
-        lateScore += 25
+        lateScore += 10
+      elif numberOfMoves > 5:
+        lateScore += 20
+
+      if board[3][3] == self.myColor:
+        lateScore += 5
+      if board[3][4] == self.myColor:
+        lateScore += 5
+      if board[4][3] == self.myColor:
+        lateScore += 5
+      if board[4][4] == self.myColor:
+        lateScore += 5  
+
+      lateScore += 2*(my_discCount - opponent_discCount)    
 
       for corner in corners:
         row, col = corner
         # print board[row][col], "color"
         if board[row][col] == self.myColor:
-          lateScore += 25
+          lateScore += 50
         elif board[row][col] == 'G':
           lateScore += 10
         else:
-          lateScore -= 5
+          lateScore -= 15
+      if board[1][1] == self.myColor:
+        lateScore -= 20
+      if board[0][1] == self.myColor:
+        lateScore -= 20
+      if board[1][0] == self.myColor:
+        lateScore -= 20
+      if board[1][6] == self.myColor:
+        lateScore -= 20
+      if board[0][6] == self.myColor:
+        lateScore -= 20
+      if board[1][7] == self.myColor:
+        lateScore -= 20
+      if board[6][1] == self.myColor:
+        lateScore -= 20
+      if board[0][6] == self.myColor:
+        lateScore -= 20
+      if board[1][7] == self.myColor:
+        lateScore -= 20
+      if board[6][6] == self.myColor:
+        lateScore -= 20
+      if board[6][7] == self.myColor:
+        lateScore -= 20
+      if board[7][6] == self.myColor:
+        lateScore -= 20
 
     elif state == 2:
-      print "Late game"
+      #print "Late game"
       lateScore = 5*(my_discCount - opponent_discCount)
+    totalScore = earlyScore + lateScore
+    #print state
     return totalScore
 
 

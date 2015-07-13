@@ -1,0 +1,4 @@
+W: 2 4
+B: 2 3
+W: 1 2
+M: Black has provided an invalid move (3, 1)! Terminating...

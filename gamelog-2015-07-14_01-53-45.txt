@@ -1,0 +1,9 @@
+W: 2 4
+B: 2 3
+M: White has provided an invalid move (2, 4)! Terminating...
+M: GAME ENDS
+White has provided an invalid move (2, 4)! Terminating...
+White: 3  Moves: 2  MB: 0.000000  Secs: 0.000290
+Black: 3  Moves: 1  MB: 0.000000  Secs: 14.300731
+White wins (by using less time)!
+
