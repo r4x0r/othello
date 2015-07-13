@@ -1,4 +1,7 @@
-import client, randomplayer, draft_player
+
+import client, randomplayer, playerv2, draft_player
+
+
 
 #replace randomPlayer.RandomPlayer with your player
 #make sure to specify the color of the player to be 'W'
