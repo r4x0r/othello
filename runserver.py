@@ -1,7 +1,7 @@
 import board, server
- 
+
 ##Use this code chunk for two automated players
-##Remember to run runclientwhite.py and runclientblack.py after runserver.py   
+##Remember to run runclientwhite.py and runclientblack.py after runserver.py
 board = board.Board()
 white = server.Server(1)
 black = server.Server(2)
