@@ -52,6 +52,8 @@ class Player:
       #RandomPlayer uses very memory so it does nothing
       print "Over memory limit, please alter!"
 
+    # Get the current state of the board
+    count_empty = self.count_empty(board)
 
     # dirs = ((-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)) # same as the dirs in constants.py
     # color = self.myColor
@@ -62,7 +64,7 @@ class Player:
     # This is from random player
     # find all valid moves
 
-    state = 0 #state 0 = opening, state 1 = after opening
+    state = 0 #state 0 = opening, state 1 = after opening,
 
     #parallel, diagonal and perpendicular openings
     # if white, parallel is the best. If black, avoid parallel
@@ -85,10 +87,15 @@ class Player:
     bestValue = self.bestValue
 
 
-
     for move in moves:
       # you are a max player
-      value = self.max_value(board, move, self.depth, self.alpha, self.beta)
+
+      # additional part for late game.
+      if count_empty <= 12:
+        value = self.max_value(board, move, 12, self.alpha, self.beta)
+      else:
+        value = self.max_value(board, move, self.depth, self.alpha, self.beta)
+
       print "  M, V:", move, value
       if value > bestValue:
         bestValue = value
@@ -98,6 +105,9 @@ class Player:
       moveCount += 1
       return bestMove
 
+
+
+  # --------------------------Minimax algorithm--------------------------#
 
   def max_value(self, board, pos, depth, alpha, beta):
     """

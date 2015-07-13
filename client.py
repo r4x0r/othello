@@ -24,16 +24,17 @@ class Client:
             outData = None
             if choice == 1: #chooseMove
                 board = self.unpackBoard(data)
-                a = constants.BRD_SIZE*constants.BRD_SIZE                
+                # print board
+                a = constants.BRD_SIZE*constants.BRD_SIZE
                 data = data[a:]
                 cols = data.strip().split()
                 prevMove = int(cols[0]),  int(cols[1])
-                
+
                 if prevMove[0] >= constants.BRD_SIZE or prevMove[1] >=constants.BRD_SIZE : prevMove = None
                 move = self.player.chooseMove(board, prevMove)
                 memMB = memory.getMemoryUsedMB()
                 if move:  outData = '%d %d %f' % (move[0], move[1], memMB)
-                else:     outData = '%d %d %f' % (constants.BRD_SIZE+1, constants.BRD_SIZE+1, memMB) #no move                
+                else:     outData = '%d %d %f' % (constants.BRD_SIZE+1, constants.BRD_SIZE+1, memMB) #no move
                 self.soc.send(outData)
 
             elif choice == 2: #gameEnd
