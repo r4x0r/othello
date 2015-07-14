@@ -63,24 +63,25 @@ class Player:
     # This is from random player
     # find all valid moves
 
-    state = 0 #state 0 = opening, state 1 = after opening
+    # to have a random element in our movement making
     randomSwitch = random.randint(0,1)
 
-    #parallel, diagonal and perpendicular openings
+    # opening move database
+    # parallel, diagonal and perpendicular openings
     # if white, parallel is the best. If black, avoid parallel
 
     boardParallel = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G',
  'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
 , 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
-    
+
     boardDiagonal1 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'W', 'G', 'G',
  'G'], ['G', 'G', 'G', 'W', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
 , 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
-    
+
     boardDiagonal2 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G',
  'G'], ['G', 'G', 'G', 'W', 'W', 'W', 'G', 'G'], ['G', 'G', 'G', 'B', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G'
 , 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
-    
+
     boardDiagonal3 = [['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G',
  'G'], ['G', 'G', 'G', 'W', 'B', 'G', 'G', 'G'], ['G', 'G', 'G', 'W', 'W', 'G', 'G', 'G'], ['G', 'G', 'G', 'W', 'G', 'G'
 , 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']]
@@ -109,6 +110,7 @@ class Player:
     if board == boardDiagonal4 and self.myColor == "B":
       return (5,2)
 
+    # selection of moves
     moves = []
     for i in xrange(len(board)):
       for j in xrange(len(board[i])):
@@ -123,7 +125,7 @@ class Player:
     bestMove = moves[0]
     bestValue = self.bestValue
 
-
+    # reverse the moves for a random ordering of the variables.
     if randomSwitch == 1:
       moves = moves[::-1]
     #  print "reversed!"
@@ -145,6 +147,7 @@ class Player:
       self.moveCount += 1
       return bestMove
 
+  ####################### Minimax Algorithm #####################################
 
   def max_value(self, board, pos, depth, alpha, beta):
     """
@@ -294,9 +297,9 @@ class Player:
       if board[4][3] == self.myColor:
         lateScore += 5
       if board[4][4] == self.myColor:
-        lateScore += 5  
+        lateScore += 5
 
-      lateScore += 2*(my_discCount - opponent_discCount)    
+      lateScore += 2*(my_discCount - opponent_discCount)
 
       for corner in corners:
         row, col = corner
